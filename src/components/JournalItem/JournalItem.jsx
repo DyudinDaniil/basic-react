@@ -5,7 +5,7 @@ function JournalItem({ title, date, text }) {
 	const formatedDate = new Intl.DateTimeFormat('ru-RU').format(date);
 
 	return (
-		<div className="journal-item">
+		<>
 			<h2 className="journal-item__title">
 				{title}
 			</h2>
@@ -19,7 +19,7 @@ function JournalItem({ title, date, text }) {
 					{text}
 				</div>
 			</div>
-		</div>
+		</>
 	);
   
 }
