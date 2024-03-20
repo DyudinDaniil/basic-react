@@ -5,6 +5,7 @@ import JournalAddButton from './components/JournalAddButton/JournalAddButton';
 import JournalList from './components/JournalList/JournalList';
 import JournalItem from './components/JournalItem/JournalItem';
 import CardButton from './components/CardButton/CardButton';
+import JournalForm from './components/JournalForm/JournalForm';
 
 import './App.css';
 
@@ -50,7 +51,7 @@ function App() {
 			</NavPanel>
 
 			<Body>
-        body
+				<JournalForm/>
 			</Body>
 		</div>
 	);

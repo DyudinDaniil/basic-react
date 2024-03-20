@@ -1,4 +1,5 @@
 .journal-add {
+  display: flex;
 	padding: 10px;
 	display: flex;
 	align-items: center;

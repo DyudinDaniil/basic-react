@@ -8,6 +8,7 @@
   border: none;
   transition: all 0.5s;
   text-align: start;
+  cursor: pointer;
 }
 
 .card-btn:hover {
