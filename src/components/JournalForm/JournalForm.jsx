@@ -1,71 +1,60 @@
-import { useEffect, useState } from 'react';
-
+import { useEffect, useReducer, useState } from 'react';
 import cn from 'classnames';
 
 import Button from '../Button/Buttion';
 
 import styles from './JournalForm.module.css';
 
-const INITIAL_FORM_STATE = {
-	title: true,
-	text: true,
-	date: true
-};
+import { INITIAL_FORM_STATE, formReducer } from './JournalForm.state';
+
+
 
 function JournalForm({ onSubmit }) {
 
-	const [formValidState, setFormValidState] = useState(INITIAL_FORM_STATE);
+	const [formState, dispathForm] = useReducer(formReducer, INITIAL_FORM_STATE);
+	const { isValid, values, isFormReadyToSubmit } = formState;
 
 	useEffect(() => {
 		let timerId;
-		if (!formValidState.title || !formValidState.text || !formValidState.date) {
+		if (!isValid.title || !isValid.text || !isValid.date) {
 			timerId = setTimeout(() => {
-				setFormValidState(INITIAL_FORM_STATE);
+				dispathForm({type: 'RESET_VALIDITY'});
 			}, 2000);
 		}
 
 		return () => {
 			clearTimeout(timerId);
 		};
-	}, [formValidState]);
+	}, [isValid]);
+
+	useEffect(() => {
+		if (isFormReadyToSubmit) {
+			onSubmit(values);
+			dispathForm({ type: 'CLEAR' });
+		}
+	}, [isFormReadyToSubmit]);
 
 	const addJournalItem = (event) => {
 		event.preventDefault();
-		const formData = new FormData(event.target);
-		const formProps = Object.fromEntries(formData);
+		dispathForm({ type: 'SUBMIT' });
+	};
 
-		let isFormValid = true;
-		if (!formProps.title?.trim().length) {
-			setFormValidState(oldState => ({...oldState, title: false}));
-			isFormValid = false;
-		} else {
-			setFormValidState(oldState => ({...oldState, title: true}));
-		}
-		if (!formProps.text?.trim().length) {
-			setFormValidState(oldState => ({...oldState, text: false}));
-			isFormValid = false;
-		} else {
-			setFormValidState(oldState => ({...oldState, text: true}));
-		}
-		if (!formProps.date) {
-			setFormValidState(oldState => ({...oldState, date: false}));
-			isFormValid = false;
-		} else {
-			setFormValidState(oldState => ({...oldState, date: true}));
-		}
-		if (!isFormValid) {
-			return;
-		}
-
-		onSubmit(formProps);
+	const onChange = (event) => {
+		dispathForm({ type: 'FILL', payload: { [event.target.name]: event.target.value }});
 	};
 
 	return (
 		<form className={styles['journal-form']} onSubmit={addJournalItem}>
 
-			<input type="title" name="title" placeholder='Title' className={cn(styles['input-title'], {
-				[styles['invalid']]: !formValidState.title
-			})} />
+			<input 
+				type="title" 
+				name="title" 
+				placeholder="Title" 
+				value={values.title} 
+				onChange={onChange}
+				className={cn(styles['input-title'], {
+					[styles['invalid']]: !isValid.title
+				})} />
 
 			<div className={styles['input-wrap']}>
 				<label htmlFor="date" className={styles['label']}>
@@ -73,9 +62,15 @@ function JournalForm({ onSubmit }) {
 					<span>Дата</span>
 				</label>
 
-				<input type="date" name="date" id="date" className={cn(styles['input'], {
-					[styles['invalid']]: !formValidState.date
-				})} />
+				<input 
+					type="date" 
+					name="date" 
+					id="date" 
+					value={values.date}  
+					onChange={onChange}
+					className={cn(styles['input'], {
+						[styles['invalid']]: !isValid.date
+					})} />
 			</div>
 
 			<div className={styles['input-wrap']}>
@@ -84,12 +79,27 @@ function JournalForm({ onSubmit }) {
 					<span>Метки</span>
 				</label>
         
-				<input type="text" name="tag" id="tag" placeholder="Tag" className={styles['input']}/>
+				<input 
+					type="text" 
+					name="tag" 
+					id="tag" 
+					placeholder="Tag"  
+					onChange={onChange}
+					value={values.tag} 
+					className={styles['input']}/>
 			</div>
 
-			<textarea name="text" id="" cols="30" rows="10" placeholder="Text" className={cn(styles['input'], {
-				[styles['invalid']]: !formValidState.text
-			})}></textarea>
+			<textarea 
+				name="text" 
+				id="" 
+				cols="30" 
+				rows="10" 
+				placeholder="Text"   
+				onChange={onChange}
+				value={values.text} 
+				className={cn(styles['input'], {
+					[styles['invalid']]: !isValid.text
+				})}></textarea>
 
 			<Button text={'Сохранить'}/>
 
