@@ -7,7 +7,7 @@ import JournalAddButton from './components/JournalAddButton/JournalAddButton';
 import JournalList from './components/JournalList/JournalList';
 import JournalForm from './components/JournalForm/JournalForm';
 
-import './App.css';
+import styles from './App.module.css';
 
 const INITIAL_DATA = [
 	{
@@ -40,7 +40,7 @@ function App() {
 	
 
 	return (
-		<div className="app">
+		<div className={styles['app']}>
 			<NavPanel>
 				<Header/>
 

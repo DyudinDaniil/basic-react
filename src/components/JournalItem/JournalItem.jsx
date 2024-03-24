@@ -1,4 +1,4 @@
-import './JournalItem.css';
+import styles from './JournalItem.module.css';
 
 function JournalItem({ title, date, text }) {
 
@@ -6,16 +6,16 @@ function JournalItem({ title, date, text }) {
 
 	return (
 		<>
-			<h2 className="journal-item__title">
+			<h2 className={styles['journal-item__title']}>
 				{title}
 			</h2>
 
-			<div className="journal-item__info">
-				<div className="journal-item__date">
+			<div className={styles['journal-item__info']}>
+				<div className={styles['journal-item__date']}>
 					{formatedDate}
 				</div>
 
-				<div className="journal-item__text">
+				<div className={styles['journal-item__text']}>
 					{text}
 				</div>
 			</div>

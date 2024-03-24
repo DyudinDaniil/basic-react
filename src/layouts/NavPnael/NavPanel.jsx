@@ -1,9 +1,9 @@
-import './NavPanel.css';
+import styles from './NavPanel.module.css';
 
 function NavPanel({ children }) {
 
 	return (
-		<div className="nav-panel">
+		<div className={styles['nav-panel']}>
 			{children}
 		</div>
 	);

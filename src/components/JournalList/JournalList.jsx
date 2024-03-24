@@ -1,7 +1,7 @@
 import JournalItem from '../JournalItem/JournalItem';
 import CardButton from '../CardButton/CardButton';
 
-import './JournalList.css';
+import styles from './JournalList.module.css';
 
 function JournalList({ items }) {
 
@@ -26,7 +26,7 @@ function JournalList({ items }) {
 		));
 
 	return (
-		<ul className="journal-list">
+		<ul className={styles['journal-list']}>
 			{journailContent}
 		</ul>
 	);
