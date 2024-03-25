@@ -1,4 +1,4 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useEffect, useReducer, useRef, useState } from 'react';
 import cn from 'classnames';
 
 import Button from '../Button/Buttion';
@@ -13,10 +13,29 @@ function JournalForm({ onSubmit }) {
 
 	const [formState, dispathForm] = useReducer(formReducer, INITIAL_FORM_STATE);
 	const { isValid, values, isFormReadyToSubmit } = formState;
+	const titleRef = useRef();
+	const dateRef = useRef();
+	const textRef = useRef();
+
+
+	const focusError = (isValid) => {
+		switch (true) {
+		case !isValid.title:
+			titleRef.current.focus();
+			break;
+		case !isValid.date:
+			dateRef.current.focus();
+			break;
+		case !isValid.text:
+			textRef.current.focus();
+			break;
+		}
+	};
 
 	useEffect(() => {
 		let timerId;
 		if (!isValid.title || !isValid.text || !isValid.date) {
+			focusError(isValid);
 			timerId = setTimeout(() => {
 				dispathForm({type: 'RESET_VALIDITY'});
 			}, 2000);
@@ -34,6 +53,7 @@ function JournalForm({ onSubmit }) {
 		}
 	}, [isFormReadyToSubmit]);
 
+
 	const addJournalItem = (event) => {
 		event.preventDefault();
 		dispathForm({ type: 'SUBMIT' });
@@ -42,6 +62,7 @@ function JournalForm({ onSubmit }) {
 	const onChange = (event) => {
 		dispathForm({ type: 'FILL', payload: { [event.target.name]: event.target.value }});
 	};
+  
 
 	return (
 		<form className={styles['journal-form']} onSubmit={addJournalItem}>
@@ -52,6 +73,7 @@ function JournalForm({ onSubmit }) {
 				placeholder="Title" 
 				value={values.title} 
 				onChange={onChange}
+				ref={titleRef}
 				className={cn(styles['input-title'], {
 					[styles['invalid']]: !isValid.title
 				})} />
@@ -68,6 +90,7 @@ function JournalForm({ onSubmit }) {
 					id="date" 
 					value={values.date}  
 					onChange={onChange}
+					ref={dateRef}
 					className={cn(styles['input'], {
 						[styles['invalid']]: !isValid.date
 					})} />
@@ -96,6 +119,7 @@ function JournalForm({ onSubmit }) {
 				rows="10" 
 				placeholder="Text"   
 				onChange={onChange}
+				ref={textRef}
 				value={values.text} 
 				className={cn(styles['input'], {
 					[styles['invalid']]: !isValid.text
