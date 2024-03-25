@@ -35,15 +35,6 @@ span {
   background: none;
 }
 
-.input-title {
-  display: block;
-  font-size: 32px;
-  font-weight: 600;
-  line-height: 40.22px;
-  border: none;
-  background: none;
-}
-
 .invalid {
   border: 1px solid red;
   background-color: rgb(68, 6, 6);
