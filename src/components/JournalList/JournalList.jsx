@@ -2,10 +2,18 @@ import JournalItem from '../JournalItem/JournalItem';
 import CardButton from '../CardButton/CardButton';
 
 import styles from './JournalList.module.css';
+import { useContext } from 'react';
+import { UserContext } from '../../context/user.context';
 
 function JournalList({ items }) {
 
-	const sortItems = items.sort((a, b) =>{
+	const { userId } = useContext(UserContext);
+
+	const filterItems = items.filter(item => {
+		return (item.userId === userId);
+	});
+
+	const sortItems = filterItems.sort((a, b) =>{
 		if (a.date < b.date) {
 			return 1;
 		} else {
